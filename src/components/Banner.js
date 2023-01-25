@@ -18,9 +18,9 @@ function Banner(props) {
         <CardMedia
           component="img"
           sx={{
-            width: "auto",
+            width: { xs: "80%", sm: "auto" },
             maxHeight: "300px",
-            display: { xs: "none", sm: "block" },
+            display: { sm: "block" },
           }}
           image="./banner.png"
         ></CardMedia>
