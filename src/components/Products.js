@@ -16,7 +16,7 @@ const theme = createTheme();
 
 export default function Products() {
   const [data, setData] = useState([]);
-  const url = "http://localhost:3001";
+  const url = "https://lime-alligator-boot.cyclic.app/";
 
   async function CarregaDados() {
     await axios
