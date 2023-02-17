@@ -6,6 +6,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import { TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -17,6 +19,10 @@ const theme = createTheme();
 export default function Products() {
   const [data, setData] = useState([]);
   const url = "https://lime-alligator-boot.cyclic.app/";
+  //const url = "http://localhost:3001";
+
+  const [search, setSearch] = useState("");
+  const lowerSearch = search.toLowerCase();
 
   async function CarregaDados() {
     await axios
@@ -36,7 +42,7 @@ export default function Products() {
         sx={{
           bgcolor: "background.paper",
           pt: 8,
-          pb: 6,
+          pb: 4,
         }}
       >
         <Container maxWidth="sm">
@@ -63,6 +69,29 @@ export default function Products() {
       </Box>
 
       <Container maxWidth="md">
+        <Grid>
+          <Box
+            sx={{
+              bgcolor: "background.paper",
+              pb: 6,
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Procure seu produto pelo código ou nome"
+              id="fullWidth"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              InputProps={{
+                sx: {
+                  borderRadius: "24px",
+                  height: "50px",
+                },
+                endAdornment: <IconButton></IconButton>,
+              }}
+            />
+          </Box>
+        </Grid>
         <Grid
           container
           spacing={4}
@@ -72,58 +101,70 @@ export default function Products() {
             alignItems: "center !important",
           }}
         >
-          {data.map((data) => (
-            <Grid
-              item
-              key={data.id}
-              xs={6}
-              sm={6}
-              md={4}
-              sx={{ marginBottom: "20px" }}
-            >
-              <Card
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
+          {data
+            .filter((product) =>
+              product.title.toLowerCase().includes(lowerSearch)
+            )
+            .map((data) => (
+              <Grid
+                item
+                key={data.id}
+                xs={6}
+                sm={6}
+                md={4}
+                sx={{ marginBottom: "20px" }}
               >
-                <CardMedia
-                  component="img"
+                <Card
                   sx={{
-                    padding: "20px",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
-                  image={data.url}
-                  alt="random"
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="h2"
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    Cód: {data.id}
-                  </Typography>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    component="subtitle2"
-                  >
-                    {data.title}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    sx={{ backgroundColor: "#E64B2C", width: "100%" }}
-                  >
-                    Ver no Site
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      padding: "20px",
+                    }}
+                    image={data.image}
+                    alt="random"
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="h2"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Cód: {data.id.toString()}
+                    </Typography>
+                    <Typography
+                      gutterBottom
+                      variant="subtitle2"
+                      component="subtitle2"
+                    >
+                      {data.title}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      sx={{ backgroundColor: "#E64B2C", width: "100%" }}
+                    >
+                      <a
+                        target="_blank"
+                        without
+                        rel="noreferrer"
+                        href={data.url}
+                        style={{ textDecoration: "none", color: "#fff" }}
+                      >
+                        Ver no Site
+                      </a>
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
         </Grid>
       </Container>
     </ThemeProvider>
